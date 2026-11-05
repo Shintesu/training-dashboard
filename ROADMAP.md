@@ -2,7 +2,7 @@
 
 > Cada fase debe cerrar con la aplicación funcionando y sus pruebas en verde antes de avanzar a la siguiente. Cada fase crea sus propias pruebas; la Fase 8 las completa. Las referencias `§N` apuntan a `SPECS.md`.
 
-## Fase 1 — Inicializar el proyecto
+## Fase 1 — Inicializar el proyecto (completada)
 - Crear el proyecto con Spring Initializr (Java 21, Maven, `groupId` `com.example`, `artifactId` `training-dashboard`, paquete `com.example.trainingdashboard`) con las dependencias `web`, `data-jpa`, `validation` y `postgresql` (§5). Sin Lombok, Thymeleaf, DevTools ni Docker Compose.
 - Crear la estructura de paquetes: `controller`, `service`, `repository`, `entity`, `dto`, `enums`, `exception`, `config`.
 - Configurar `application.properties` y el perfil `test` según el §14: variables de entorno con valores por defecto locales, `DB_PASSWORD` sin valor por defecto y `spring.jpa.open-in-view=false`.
