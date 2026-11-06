@@ -12,7 +12,7 @@
 - Primer test: el contexto carga contra la base de prueba.
 - Auditar los nombres de propiedades contra los metadatos de los jars: Spring ignora en silencio las que no reconoce.
 
-## Fase 2 — Modelo
+## Fase 2 — Modelo (completada)
 - Crear el enum `WorkoutType` con la etiqueta en español y el factor `caloriesPerMinute` de cada valor (§8.1).
 - Crear la entidad `Workout` según el §7: tabla `workouts`, columnas y restricciones `NOT NULL`, `@Enumerated(EnumType.STRING)`, sin `equals`, `hashCode` ni `toString`.
 - Crear `WorkoutRepository` con `findByDateBetween` y `findAllByOrderByDateDescIdDesc`.
