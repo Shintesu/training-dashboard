@@ -252,7 +252,14 @@ El dashboard y la comparativa usan el mismo método para calcular las métricas 
 | `date` | Obligatoria; formato ISO `AAAA-MM-DD` |
 | `calories` | No se recibe |
 
-Una duración con decimales (por ejemplo `30.5`) o en texto se rechaza. Los mensajes exactos están en el §12.
+La lectura de los valores es estricta. Se aceptan solo estas formas JSON y cualquier otra se rechaza con 400:
+
+- `type`: una cadena con uno de los cinco códigos exactos, en mayúsculas. Se rechazan los números (por ejemplo `0`), las minúsculas y cualquier otro tipo JSON.
+- `durationMinutes`: un entero JSON. Se rechazan los decimales (`30.5` y `30.0`), el texto (incluido `"30"`), los booleanos, los arreglos y los objetos.
+- `date`: una cadena `AAAA-MM-DD` con cuatro dígitos de año y una fecha válida del calendario. Se rechazan los números, los arreglos, la fecha con hora, los años con signo o de más de cuatro dígitos, los espacios sobrantes y las fechas imposibles como `2026-02-30`.
+- Una cadena vacía cuenta como ausente y produce el mensaje de campo obligatorio.
+
+`JacksonConfig` aplica estas reglas, porque los valores por defecto de Jackson 3 aceptan en silencio varios de ellos (por ejemplo, `30.5` como 30 o `0` como `RUNNING`). Los mensajes exactos están en el §12.
 
 ---
 
@@ -354,25 +361,29 @@ Todo error de la API tiene este cuerpo:
 
 Nunca se muestran trazas, SQL ni mensajes de librerías. Ningún mensaje contiene credenciales.
 
+Un error no previsto se registra a `ERROR` con el método, la ruta (sin query string) y la clase y los frames de la excepción y de cada causa. Nunca se registran los mensajes de las excepciones (podrían contener cadenas de conexión), el cuerpo de la solicitud, las cabeceras ni las variables de entorno.
+
+Un entero fuera del rango de `int` se rechaza con 400, con el mensaje de la duración o con el de cuerpo inválido.
+
 ### 12.2 Mensajes por campo (400)
 
 | Caso | Campo | Mensaje |
 |---|---|---|
-| Tipo ausente o nulo | `type` | El tipo de entrenamiento es obligatorio |
-| Tipo desconocido | `type` | El tipo de entrenamiento no es válido |
-| Duración ausente o nula | `durationMinutes` | La duración es obligatoria |
+| Tipo ausente, nulo o cadena vacía | `type` | El tipo de entrenamiento es obligatorio |
+| Tipo que no es uno de los códigos exactos (otro código, minúsculas, número u otro tipo JSON) | `type` | El tipo de entrenamiento no es válido |
+| Duración ausente, nula o cadena vacía | `durationMinutes` | La duración es obligatoria |
 | Duración menor que 1 | `durationMinutes` | La duración debe ser mayor que 0 |
 | Duración mayor que 1440 | `durationMinutes` | La duración no puede superar 1440 minutos |
-| Duración con decimales o en texto | `durationMinutes` | La duración debe ser un número entero de minutos |
-| Fecha ausente o nula | `date` | La fecha es obligatoria |
-| Fecha con formato inválido | `date` | La fecha no es válida (formato AAAA-MM-DD) |
+| Duración que no es un entero JSON (decimales, texto, booleano, arreglo u objeto) | `durationMinutes` | La duración debe ser un número entero de minutos |
+| Fecha ausente, nula o cadena vacía | `date` | La fecha es obligatoria |
+| Fecha que no es una cadena `AAAA-MM-DD` válida (formato, calendario u otro tipo JSON) | `date` | La fecha no es válida (formato AAAA-MM-DD) |
 
 ### 12.3 Mensajes generales
 
 | Caso | Estado | `message` |
 |---|---|---|
 | Cualquier error por campo | 400 | Los datos del entrenamiento no son válidos |
-| Cuerpo vacío o JSON mal formado | 400 | El cuerpo de la solicitud no es válido |
+| Cuerpo vacío, JSON mal formado o raíz que no es un objeto | 400 | El cuerpo de la solicitud no es válido |
 | `DELETE` con id no numérico | 400 | El identificador del entrenamiento no es válido |
 | `DELETE` de un id inexistente | 404 | No se encontró el entrenamiento con id N |
 | Error no previsto | 500 | Ocurrió un error inesperado. Inténtalo de nuevo más tarde |
@@ -417,7 +428,7 @@ static/
 ### 13.1 Registro (`index.html`)
 
 - Selector de tipo, cargado desde `GET /api/workout-types`.
-- Campo de duración, campo de fecha (por defecto, la fecha de hoy del navegador) y botón "Registrar".
+- Campo de duración, campo de fecha (por defecto, la fecha de hoy del navegador) y botón "Registrar". La duración se envía como número entero JSON (no como cadena) y la fecha como `AAAA-MM-DD` (§10).
 - Tras registrar: mensaje de éxito (§12.4), se vacía la duración, se conservan tipo y fecha y se refresca la lista.
 - Errores por campo bajo el campo correspondiente y `message` en la zona de estado.
 - Tabla "Entrenamientos registrados" (Fecha, Tipo, Duración (min), Calorías (kcal), Acciones) con botón "Eliminar" por fila y confirmación.
@@ -534,10 +545,10 @@ Casos prioritarios:
 - Entrenamiento con fecha futura dentro de la semana actual: cuenta.
 - Orden del listado: fecha descendente, luego id descendente.
 - Eliminar un entrenamiento existente, uno inexistente y un id no numérico.
-- Cada mensaje del §12, incluidos `30.5`, texto en la duración, tipo desconocido, fecha mal formada y cuerpo vacío.
+- Cada mensaje del §12, incluidos `30.5`, texto en la duración, tipo desconocido, fecha mal formada y cuerpo vacío, y cada valor de lectura estricta del §10 (por ejemplo `"30"`, tipo `0`, fecha con hora, arreglos y cadenas vacías).
 - `calories` e `id` enviados por el cliente se ignoran.
 - `GET /api/workout-types` y `GET /` responden 200.
-- Un error no previsto devuelve el 500 genérico sin detalles.
+- Un error no previsto devuelve el 500 genérico sin detalles, y el log no contiene mensajes de excepciones ni la cadena de conexión.
 - `DemoDataLoader`: totales exactos; no toca los datos si la semana actual tiene entrenamientos; reemplaza los datos viejos y la tabla vacía; conserva los datos anteriores y no detiene el arranque si la carga falla; la tarea programada queda registrada con la inicialización perezosa activada; arranque sobre una base recién creada.
 
 El frontend se verifica recorriendo los escenarios del §15 en el navegador, incluida la vista de 375 px. No hay herramientas de prueba de JavaScript.
@@ -690,9 +701,10 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 
 ## 22. Versión y registro de cambios
 
-**Versión actual: 1.1**
+**Versión actual: 1.2**
 
 | Versión | Fecha | Cambio |
 |---|---|---|
 | 1.0 | 2026-11-04 | Versión inicial a partir del SPEC original, con las decisiones cerradas: rutas y enums en inglés, `DELETE` sin `PUT`, zona horaria configurable, formato de errores, datos de demo y despliegue en Render + Neon |
 | 1.1 | 2026-11-04 | Los datos de demo se recargan solos cuando la semana actual queda vacía (revisión al arrancar y diaria) y la revisión nunca detiene la aplicación |
+| 1.2 | 2026-11-07 | Lectura estricta de `type`, `durationMinutes` y `date` (§10), cadena vacía como ausente y log del 500 sin mensajes (§12.1) |

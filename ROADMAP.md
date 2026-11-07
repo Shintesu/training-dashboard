@@ -19,13 +19,15 @@
 - Crear los DTO como `record`: `WorkoutRequest` (Bean Validation con los mensajes exactos del §12.2), `WorkoutResponse`, `WorkoutTypeResponse` y `ErrorResponse`.
 - Tests: factor y etiqueta de cada tipo; integración que verifique el esquema real (tabla y columnas) y la consulta por rango con fechas inclusivas.
 
-## Fase 3 — Registro y consulta
+## Fase 3 — Registro y consulta (completada)
 - Crear `WorkoutService`, `WorkoutController`, `WorkoutTypeController`, `WorkoutNotFoundException` y `GlobalExceptionHandler`.
 - Rutas: `POST /api/workouts`, `GET /api/workouts`, `DELETE /api/workouts/{id}` y `GET /api/workout-types` (§11).
 - Calcular las calorías en el Service; ignorar `calories` e `id` enviados por el cliente (§8.3).
 - Devolver el cuerpo `ErrorResponse` del §12 con los mensajes exactos: validación por campo, tipo desconocido, duración con decimales o en texto, fecha mal formada, cuerpo ilegible, id no numérico, id inexistente y 500 genérico sin detalles.
 - Listar ordenado por fecha descendente y luego por id descendente.
-- Tests: unitarios del Service (calorías de cada tipo, duraciones 0, 1, 1440 y 1441) y flujo con `MockMvc` para cada mensaje y código de estado.
+- Crear `JacksonConfig` en `config` con la lectura estricta del §10: `durationMinutes` solo entero JSON, `type` solo el código exacto como texto y `date` solo una cadena `AAAA-MM-DD` válida; la cadena vacía cuenta como ausente. Los valores por defecto de Jackson 3 aceptan en silencio `30.5`, `"30"`, `type: 0` y fechas numéricas.
+- Registrar en el log del 500 el método, la ruta y la clase y los frames de cada causa, nunca los mensajes (§12.1).
+- Tests: unitarios del Service (calorías de cada tipo con duraciones 1 y 1440), flujo con `MockMvc` para cada mensaje y código de estado (incluidas las duraciones 0 y 1441 y cada valor de lectura estricta) y una prueba del log del 500 que verifique que no filtra mensajes.
 
 ## Fase 4 — Dashboard semanal
 - Crear `DashboardService` y `DashboardController` con `GET /api/dashboard/weekly`.
@@ -39,7 +41,7 @@
 
 ## Fase 6 — Frontend
 - Crear `index.html`, `dashboard.html`, `comparison.html`, `styles.css` y los módulos de `js/` del §13, sin librerías ni CDN.
-- Registro: selector cargado desde `/api/workout-types`, formulario, errores por campo, mensajes del §12.4 y tabla con eliminación y confirmación.
+- Registro: selector cargado desde `/api/workout-types`, formulario, errores por campo, mensajes del §12.4 y tabla con eliminación y confirmación. La duración se envía como número entero JSON, no como texto (§10).
 - Dashboard y comparativa con los formatos del §13.4 (fechas `DD/MM/AAAA`, indicadores `▲`, `▼` y `=`).
 - `/` responde 200 (health check).
 - Verificar en el navegador con `PORT=8081`: flujos felices, errores, estados vacíos con una base temporal y vista de 375 px.

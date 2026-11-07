@@ -40,10 +40,10 @@ Detalle en el SPECS; estas son las que no se negocian.
 - La semana se deriva de las fechas y no se guarda: lunes a domingo, fechas inclusivas, calculada en el backend (SPECS §9). El frontend nunca envía `startDate` ni `endDate`.
 - La fecha actual sale siempre de un `Clock` inyectado, con la zona de `app.time-zone`. Nunca `LocalDate.now()` sin reloj en la lógica de negocio.
 - El dashboard y la comparativa usan el mismo método para calcular las métricas de un período. Las diferencias son `actual - anterior`, absolutas y sin porcentajes.
-- `durationMinutes` es un entero de 1 a 1440; el tipo es uno de los cinco códigos del enum; la fecha es obligatoria. No se rechazan fechas futuras (SPECS §9.6 y §10).
+- `durationMinutes` es un entero de 1 a 1440; el tipo es uno de los cinco códigos del enum; la fecha es obligatoria. No se rechazan fechas futuras (SPECS §9.6 y §10). La lectura es estricta: `durationMinutes` solo acepta un entero JSON, `type` solo el código exacto como texto y `date` solo una cadena `AAAA-MM-DD` válida; la cadena vacía cuenta como ausente (SPECS §10, `JacksonConfig`).
 - Los totales de las métricas son `long`.
 - Solo existe `DELETE /api/workouts/{id}` (borrado duro). No hay `PUT` ni edición.
-- Todo error de la API usa el cuerpo `ErrorResponse` (`message` y `fieldErrors`) con los mensajes exactos del SPECS §12. Un error no previsto devuelve el 500 genérico, sin trazas, SQL ni mensajes de librerías.
+- Todo error de la API usa el cuerpo `ErrorResponse` (`message` y `fieldErrors`) con los mensajes exactos del SPECS §12. Un error no previsto devuelve el 500 genérico, sin trazas, SQL ni mensajes de librerías. En el log solo se registran el método, la ruta y las clases y frames de la excepción y de sus causas, nunca sus mensajes (SPECS §12.1).
 - JSON en `camelCase`, rutas en inglés y en plural, y valores controlados como enums (`RUNNING`, `CYCLING`, `SWIMMING`, `WEIGHTS`, `WALKING`).
 - Los mensajes y textos que ve la persona usuaria están en español (SPECS §12 y §13).
 - El frontend es JavaScript vanilla sin librerías ni CDN; los datos de la API se insertan con `textContent` (SPECS §13).

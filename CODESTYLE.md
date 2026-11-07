@@ -233,7 +233,7 @@ Adding one requires: an issue explaining why the existing stack cannot cover it,
 - Business exceptions are unchecked: `WorkoutNotFoundException`. It carries the message shown to the user, in Spanish, without technical details.
 - `GlobalExceptionHandler` is the only place that builds an `ErrorResponse`. It maps validation failures, unreadable bodies, type mismatches on the path, `WorkoutNotFoundException` and anything else (a generic 500) to the exact messages in SPECS §12.
 - Every message names the concrete thing: `"No se encontró el entrenamiento con id 42"`, never `"No encontrado"`.
-- Never show a stack trace, SQL or a vendor message. The 500 response is generic; the cause is logged at `ERROR`.
+- Never show a stack trace, SQL or a vendor message. The 500 response is generic; the exception classes and stack frames are logged at `ERROR`, never their messages (§9.1).
 - Messages never contain credentials.
 - Never `catch (Exception e) { }`. Never catch to log-and-rethrow the same thing twice.
 - Fail early: validate in the request record and in the service before touching the database.
@@ -258,6 +258,7 @@ log.debug("registered workout {} of type {}", workoutId, type);
 
 - Guard expensive argument computation with `log.isDebugEnabled()`.
 - Never log database credentials or connection strings that carry them.
+- For an unexpected error, log the method, the path without query string, and the class name and stack frames of the exception and of each cause. Never log exception messages (they can carry connection strings), request bodies, headers or environment variables. Do not pass the exception as the last argument of `log.error`: Logback would print its message.
 - Expected business errors (invalid request, not found) are not logged above `DEBUG`.
 
 ### 9.2 Levels
