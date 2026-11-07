@@ -29,7 +29,7 @@
 - Registrar en el log del 500 el método, la ruta y la clase y los frames de cada causa, nunca los mensajes (§12.1).
 - Tests: unitarios del Service (calorías de cada tipo con duraciones 1 y 1440), flujo con `MockMvc` para cada mensaje y código de estado (incluidas las duraciones 0 y 1441 y cada valor de lectura estricta) y una prueba del log del 500 que verifique que no filtra mensajes.
 
-## Fase 4 — Dashboard semanal
+## Fase 4 — Dashboard semanal (completada)
 - Crear `DashboardService` y `DashboardController` con `GET /api/dashboard/weekly`.
 - Determinar la semana actual de lunes a domingo con el `Clock` inyectado, con fechas inclusivas (§9.2).
 - Calcular las tres métricas en Java a partir de `findByDateBetween`, en un único método reutilizable (§9.4); una semana vacía devuelve ceros.
