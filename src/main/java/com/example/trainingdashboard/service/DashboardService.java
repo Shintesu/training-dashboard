@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.trainingdashboard.dto.WeeklyComparisonResponse;
+import com.example.trainingdashboard.dto.WeeklyDifferenceResponse;
 import com.example.trainingdashboard.dto.WeeklyMetricsResponse;
 import com.example.trainingdashboard.entity.Workout;
 import com.example.trainingdashboard.repository.WorkoutRepository;
@@ -30,9 +32,24 @@ public class DashboardService {
 
     @Transactional(readOnly = true)
     public WeeklyMetricsResponse weeklyMetrics() {
+        return metricsForWeek(currentWeekStart());
+    }
+
+    @Transactional(readOnly = true)
+    public WeeklyComparisonResponse weeklyComparison() {
+        LocalDate start = currentWeekStart();
+        WeeklyMetricsResponse currentWeek = metricsForWeek(start);
+        WeeklyMetricsResponse previousWeek = metricsForWeek(start.minusDays(7));
+        WeeklyDifferenceResponse difference = new WeeklyDifferenceResponse(
+                currentWeek.totalWorkouts() - previousWeek.totalWorkouts(),
+                currentWeek.totalDurationMinutes() - previousWeek.totalDurationMinutes(),
+                currentWeek.totalCalories() - previousWeek.totalCalories());
+        return new WeeklyComparisonResponse(currentWeek, previousWeek, difference);
+    }
+
+    private LocalDate currentWeekStart() {
         LocalDate today = LocalDate.now(clock);
-        LocalDate startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        return metricsForWeek(startDate);
+        return today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     }
 
     private WeeklyMetricsResponse metricsForWeek(LocalDate startDate) {
