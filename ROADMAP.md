@@ -35,7 +35,7 @@
 - Calcular las tres métricas en Java a partir de `findByDateBetween`, en un único método reutilizable (§9.4); una semana vacía devuelve ceros.
 - Tests con `Clock.fixed`: lunes, mitad de semana y domingo; fechas en los bordes; cruce de mes y de año; fecha futura dentro de la semana actual; semana vacía.
 
-## Fase 5 — Comparativa
+## Fase 5 — Comparativa (completada)
 - Crear `GET /api/dashboard/comparison` con la semana actual, la anterior y la diferencia `actual - anterior` (§9.3 y §9.5), reutilizando el método de métricas.
 - Tests: diferencias positivas, negativas y cero; semana anterior vacía; los números del §15 (5 / 180 / 1200 contra 4 / 150 / 980).
 
