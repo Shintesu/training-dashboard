@@ -302,6 +302,8 @@ log.debug("registered workout {} of type {}", workoutId, type);
 - No inline event handlers (`onclick=...`) and no inline styles.
 - Text coming from the API is inserted with `textContent`, never with `innerHTML`.
 - No business rules: no calorie or week calculation.
+- Convert form values explicitly: `Number("")` and `Number("  ")` are `0`, so trim first and send `null` for an empty field.
+- Never show or build a date with `new Date(isoString)` or `toISOString()`: both go through UTC and can show the wrong day. Split the string, or use the local getters for today's date.
 
 ### 11.2 HTML and CSS
 

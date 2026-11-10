@@ -39,13 +39,13 @@
 - Crear `GET /api/dashboard/comparison` con la semana actual, la anterior y la diferencia `actual - anterior` (§9.3 y §9.5), reutilizando el método de métricas.
 - Tests: diferencias positivas, negativas y cero; semana anterior vacía; los números del §15 (5 / 180 / 1200 contra 4 / 150 / 980).
 
-## Fase 6 — Frontend
+## Fase 6 — Frontend (completada)
 - Crear `index.html`, `dashboard.html`, `comparison.html`, `styles.css` y los módulos de `js/` del §13, sin librerías ni CDN.
 - Registro: selector cargado desde `/api/workout-types`, formulario, errores por campo, mensajes del §12.4 y tabla con eliminación y confirmación. La duración se envía como número entero JSON, no como texto (§10).
 - Dashboard y comparativa con los formatos del §13.4 (fechas `DD/MM/AAAA`, indicadores `▲`, `▼` y `=`).
 - `/` responde 200 (health check).
 - Verificar en el navegador con `PORT=8081`: flujos felices, errores, estados vacíos con una base temporal y vista de 375 px.
-- Tests: `GET /` y las páginas estáticas responden 200.
+- Tests: `GET /`, las páginas y los archivos estáticos responden 200 con su tipo y cada enlace local resuelve; una prueba de convenciones (`StaticFrontendConventionsTest`) hace cumplir el CODESTYLE §11 y comprueba que cada import de los módulos JS tiene su export.
 
 ## Fase 7 — Datos de demo
 - Crear `DemoDataLoader` con el perfil `demo` según el §15: revisión al arrancar y una vez al día (00:05 en la zona de `app.time-zone`) que reemplaza todos los datos cuando la semana actual no tiene entrenamientos; carga a través de `WorkoutService`, en una sola transacción y con fechas relativas al `Clock`.

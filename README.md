@@ -138,6 +138,7 @@ La demo corre en Render con la base de datos en Neon. Render no ejecuta Java de 
 - **Un solo formato de error:** `ErrorResponse` con mensajes exactos, probados uno por uno.
 - **Entrada estricta:** los valores por defecto de Jackson 3 aceptan en silencio cosas como `30.5` (como 30), `"30"` o un tipo numérico; una configuración propia los rechaza para que la API sea predecible.
 - **Errores sin filtrar datos:** el 500 devuelve un mensaje genérico y el log registra clases y frames, nunca mensajes, para no exponer credenciales.
+- **Frontend sin librerías y con reglas verificadas:** HTML, CSS y módulos ES servidos por la misma aplicación; una prueba Java vigila las convenciones (sin `innerHTML`, sin `var`, sin estilos en línea, sin URL externas) y que cada enlace e import resuelva.
 - **Borrado duro sin edición:** un registro equivocado se elimina y se vuelve a cargar; no hay historial que conservar.
 - **Fechas futuras permitidas:** evita que un navegador en otra zona horaria falle con la fecha por defecto del formulario.
 - **Docker solo para desplegar:** Render exige una imagen para Java; el desarrollo sigue sin Docker.

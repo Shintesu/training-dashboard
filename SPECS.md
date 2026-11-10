@@ -400,6 +400,7 @@ Un entero fuera del rango de `int` se rechaza con 400, con el mensaje de la dura
 | Lista vacía | Todavía no hay entrenamientos registrados |
 | Falla de red al enviar o eliminar | No se pudo conectar con el servidor. Inténtalo de nuevo más tarde |
 | Falla al cargar datos | No se pudo cargar la información. Inténtalo de nuevo más tarde |
+| Carga en curso | Cargando... |
 
 `N` en el registro exitoso son las calorías de la respuesta.
 
@@ -427,7 +428,7 @@ static/
 
 ### 13.1 Registro (`index.html`)
 
-- Selector de tipo, cargado desde `GET /api/workout-types`.
+- Selector de tipo, cargado desde `GET /api/workout-types`. Las etiquetas salen de la API, sin copia en el frontend (§8.1), y un código que no esté en la lista se muestra tal cual. El botón "Registrar" permanece deshabilitado hasta que carguen los tipos y, si no cargan, se muestra el texto de falla al cargar datos.
 - Campo de duración, campo de fecha (por defecto, la fecha de hoy del navegador) y botón "Registrar". La duración se envía como número entero JSON (no como cadena) y la fecha como `AAAA-MM-DD` (§10).
 - Tras registrar: mensaje de éxito (§12.4), se vacía la duración, se conservan tipo y fecha y se refresca la lista.
 - Errores por campo bajo el campo correspondiente y `message` en la zona de estado.
@@ -701,10 +702,11 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 
 ## 22. Versión y registro de cambios
 
-**Versión actual: 1.2**
+**Versión actual: 1.3**
 
 | Versión | Fecha | Cambio |
 |---|---|---|
 | 1.0 | 2026-11-04 | Versión inicial a partir del SPEC original, con las decisiones cerradas: rutas y enums en inglés, `DELETE` sin `PUT`, zona horaria configurable, formato de errores, datos de demo y despliegue en Render + Neon |
 | 1.1 | 2026-11-04 | Los datos de demo se recargan solos cuando la semana actual queda vacía (revisión al arrancar y diaria) y la revisión nunca detiene la aplicación |
 | 1.2 | 2026-11-07 | Lectura estricta de `type`, `durationMinutes` y `date` (§10), cadena vacía como ausente y log del 500 sin mensajes (§12.1) |
+| 1.3 | 2026-11-10 | Texto "Cargando..." (§12.4), etiquetas de los tipos desde la API y botón de registro deshabilitado hasta cargar los tipos (§13.1) |
