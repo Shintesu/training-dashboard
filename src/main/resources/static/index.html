@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Registro de entrenamientos</title>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Registro de entrenamientos</h1>
+        <nav aria-label="Navegación principal">
+            <ul class="nav-list">
+                <li><a href="/" aria-current="page">Registro</a></li>
+                <li><a href="/dashboard.html">Dashboard</a></li>
+                <li><a href="/comparison.html">Comparativa</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section aria-labelledby="register-title">
+            <h2 id="register-title">Registrar entrenamiento</h2>
+            <form id="workout-form" novalidate>
+                <div class="form-field">
+                    <label for="type">Tipo de entrenamiento</label>
+                    <select id="type" name="type" aria-describedby="type-error" required></select>
+                    <p class="field-error" id="type-error"></p>
+                </div>
+                <div class="form-field">
+                    <label for="duration-minutes">Duración (min)</label>
+                    <input id="duration-minutes" name="durationMinutes" type="number" min="1" max="1440"
+                        step="1" inputmode="numeric" aria-describedby="duration-minutes-error" required>
+                    <p class="field-error" id="duration-minutes-error"></p>
+                </div>
+                <div class="form-field">
+                    <label for="date">Fecha</label>
+                    <input id="date" name="date" type="date" aria-describedby="date-error" required>
+                    <p class="field-error" id="date-error"></p>
+                </div>
+                <button id="register-button" type="submit" class="primary-button" disabled>Registrar</button>
+            </form>
+            <p id="register-status" role="status" class="status-message"></p>
+            <p id="register-alert" role="alert" class="alert-message"></p>
+        </section>
+        <section aria-labelledby="workout-list-title">
+            <h2 id="workout-list-title">Entrenamientos registrados</h2>
+            <p id="workout-list-status" class="status-text">Cargando...</p>
+            <p id="workout-list-empty" class="empty-message" hidden></p>
+            <div class="table-wrapper">
+                <table id="workout-table" hidden>
+                    <thead>
+                        <tr>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Duración (min)</th>
+                            <th scope="col">Calorías (kcal)</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workout-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="/js/register.js"></script>
+</body>
+</html>

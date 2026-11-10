@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Comparativa semanal</title>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Comparativa semanal</h1>
+        <nav aria-label="Navegación principal">
+            <ul class="nav-list">
+                <li><a href="/">Registro</a></li>
+                <li><a href="/dashboard.html">Dashboard</a></li>
+                <li><a href="/comparison.html" aria-current="page">Comparativa</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section aria-labelledby="comparison-title">
+            <h2 id="comparison-title">Semana actual frente a la anterior</h2>
+            <div class="table-wrapper">
+                <table id="comparison-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" id="metric-header"></th>
+                            <th scope="col">
+                                <span id="current-week-label"></span>
+                                <span class="week-range" id="current-week-range"></span>
+                            </th>
+                            <th scope="col">
+                                <span id="previous-week-label"></span>
+                                <span class="week-range" id="previous-week-range"></span>
+                            </th>
+                            <th scope="col" id="difference-header"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-body"></tbody>
+                </table>
+            </div>
+            <p id="comparison-status" role="status" class="status-text">Cargando...</p>
+            <p id="comparison-alert" role="alert" class="alert-message"></p>
+        </section>
+    </main>
+    <script type="module" src="/js/comparison.js"></script>
+</body>
+</html>

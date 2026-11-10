@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Dashboard semanal</title>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Dashboard semanal</h1>
+        <nav aria-label="Navegación principal">
+            <ul class="nav-list">
+                <li><a href="/">Registro</a></li>
+                <li><a href="/dashboard.html" aria-current="page">Dashboard</a></li>
+                <li><a href="/comparison.html">Comparativa</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title">Resumen de la semana</h2>
+            <p id="week-range" class="week-range"></p>
+            <div class="card-grid">
+                <article class="card">
+                    <h3>Entrenamientos</h3>
+                    <p class="card-value" id="total-workouts"></p>
+                </article>
+                <article class="card">
+                    <h3>Minutos totales</h3>
+                    <p class="card-value" id="total-duration-minutes"></p>
+                </article>
+                <article class="card">
+                    <h3>Calorías totales</h3>
+                    <p class="card-value" id="total-calories"></p>
+                </article>
+            </div>
+            <p id="dashboard-status" role="status" class="status-text">Cargando...</p>
+            <p id="dashboard-alert" role="alert" class="alert-message"></p>
+        </section>
+    </main>
+    <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>
