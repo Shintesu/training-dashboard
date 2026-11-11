@@ -111,14 +111,6 @@ public class GlobalExceptionHandler {
 
     private void logUnexpectedError(HttpServletRequest request, RuntimeException exception) {
         log.error("Unexpected error handling {} {}", request.getMethod(), request.getRequestURI());
-        Set<Throwable> seen = Collections.newSetFromMap(new IdentityHashMap<>());
-        Throwable current = exception;
-        while (current != null && seen.add(current)) {
-            log.error("{}", current.getClass().getName());
-            for (StackTraceElement element : current.getStackTrace()) {
-                log.error("    at {}", element);
-            }
-            current = current.getCause();
-        }
+        SanitizedStackTrace.log(log, exception);
     }
 }
