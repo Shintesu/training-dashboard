@@ -47,7 +47,7 @@
 - Verificar en el navegador con `PORT=8081`: flujos felices, errores, estados vacíos con una base temporal y vista de 375 px.
 - Tests: `GET /`, las páginas y los archivos estáticos responden 200 con su tipo y cada enlace local resuelve; una prueba de convenciones (`StaticFrontendConventionsTest`) hace cumplir el CODESTYLE §11 y comprueba que cada import de los módulos JS tiene su export.
 
-## Fase 7 — Datos de demo
+## Fase 7 — Datos de demo (completada)
 - Crear `DemoDataLoader` con el perfil `demo` según el §15: revisión al arrancar y una vez al día (00:05 en la zona de `app.time-zone`) que reemplaza todos los datos cuando la semana actual no tiene entrenamientos; carga a través de `WorkoutService`, en una sola transacción y con fechas relativas al `Clock`.
 - La revisión nunca detiene la aplicación: ante una falla se registra a `ERROR` sin credenciales, se conservan los datos anteriores y se reintenta en la siguiente revisión. No se ejecuta de forma concurrente.
 - Declarar el loader como no perezoso (`@Lazy(false)`): con `SPRING_MAIN_LAZY_INITIALIZATION=true` en Render, un bean perezoso podría no registrar su tarea programada.

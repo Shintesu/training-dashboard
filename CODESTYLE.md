@@ -184,7 +184,7 @@ com.example.trainingdashboard.repository   Spring Data JPA access
 com.example.trainingdashboard.entity       JPA entities
 com.example.trainingdashboard.dto          request and response records
 com.example.trainingdashboard.enums        WorkoutType
-com.example.trainingdashboard.exception    business exceptions and GlobalExceptionHandler
+com.example.trainingdashboard.exception    business exceptions, GlobalExceptionHandler and SanitizedStackTrace
 com.example.trainingdashboard.config       configuration, including the Clock bean and DemoDataLoader
 ```
 

@@ -133,7 +133,7 @@ com.example.trainingdashboard
 │                WeeklyMetricsResponse, WeeklyDifferenceResponse,
 │                WeeklyComparisonResponse, ErrorResponse
 ├── enums        WorkoutType
-├── exception    GlobalExceptionHandler, WorkoutNotFoundException
+├── exception    GlobalExceptionHandler, WorkoutNotFoundException, SanitizedStackTrace
 └── config       ClockConfig, DemoDataLoader
 ```
 
@@ -527,6 +527,8 @@ Las fechas se calculan al cargar, por lo que los datos envejecen. Cada lunes a l
 
 Consecuencias aceptadas: los datos que agreguen los visitantes se pierden en cada recarga, y la semana vacía no puede mostrarse de forma permanente en la demo (se comprueba en las pruebas y con una base temporal vacía).
 
+Al arrancar, el puerto HTTP acepta conexiones antes de que termine la primera carga: una petición inmediata puede ver ceros durante unos instantes.
+
 ---
 
 ## 16. Pruebas
@@ -702,7 +704,7 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 
 ## 22. Versión y registro de cambios
 
-**Versión actual: 1.3**
+**Versión actual: 1.4**
 
 | Versión | Fecha | Cambio |
 |---|---|---|
@@ -710,3 +712,4 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 | 1.1 | 2026-11-04 | Los datos de demo se recargan solos cuando la semana actual queda vacía (revisión al arrancar y diaria) y la revisión nunca detiene la aplicación |
 | 1.2 | 2026-11-07 | Lectura estricta de `type`, `durationMinutes` y `date` (§10), cadena vacía como ausente y log del 500 sin mensajes (§12.1) |
 | 1.3 | 2026-11-10 | Texto "Cargando..." (§12.4), etiquetas de los tipos desde la API y botón de registro deshabilitado hasta cargar los tipos (§13.1) |
+| 1.4 | 2026-11-11 | `SanitizedStackTrace` compartida para el log de errores (§6.2) y nota sobre la primera carga de la demo al arrancar (§15.2) |
