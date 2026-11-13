@@ -8,6 +8,7 @@ import {
     LOAD_ERROR,
     NETWORK_ERROR,
     buildWorkoutTypeLabels,
+    deleteButtonAriaLabel,
     formatDate,
     registrationSuccessMessage,
     todayIso
@@ -35,18 +36,36 @@ function setVisible(element, visible) {
     element.hidden = !visible;
 }
 
+function setFieldInvalid(control, invalid) {
+    if (invalid) {
+        control.setAttribute("aria-invalid", "true");
+    } else {
+        control.removeAttribute("aria-invalid");
+    }
+}
+
+function clearFieldInvalidState() {
+    setFieldInvalid(typeSelect, false);
+    setFieldInvalid(durationInput, false);
+    setFieldInvalid(dateInput, false);
+}
+
 function clearMessages() {
     statusZone.textContent = "";
     alertZone.textContent = "";
     typeError.textContent = "";
     durationError.textContent = "";
     dateError.textContent = "";
+    clearFieldInvalidState();
 }
 
 function showFieldErrors(fieldErrors) {
     typeError.textContent = fieldErrors.type || "";
     durationError.textContent = fieldErrors.durationMinutes || "";
     dateError.textContent = fieldErrors.date || "";
+    setFieldInvalid(typeSelect, Boolean(typeError.textContent));
+    setFieldInvalid(durationInput, Boolean(durationError.textContent));
+    setFieldInvalid(dateInput, Boolean(dateError.textContent));
 }
 
 async function loadWorkoutTypes() {
@@ -75,14 +94,16 @@ function buildCell(text, tagName = "td") {
     return cell;
 }
 
-function buildActionsCell(workoutId) {
+function buildActionsCell(workout) {
     const cell = document.createElement("td");
     const button = document.createElement("button");
+    const typeLabel = typeLabels[workout.type] || workout.type;
     button.type = "button";
     button.className = "delete-button";
     button.textContent = DELETE_BUTTON_LABEL;
+    button.setAttribute("aria-label", deleteButtonAriaLabel(typeLabel, workout.date));
     button.addEventListener("click", () => {
-        void deleteWorkoutRow(workoutId);
+        void deleteWorkoutRow(workout.id);
     });
     cell.append(button);
     return cell;
@@ -95,7 +116,7 @@ function buildWorkoutRow(workout) {
         buildCell(typeLabels[workout.type] || workout.type),
         buildCell(String(workout.durationMinutes)),
         buildCell(String(workout.calories)),
-        buildActionsCell(workout.id)
+        buildActionsCell(workout)
     );
     return row;
 }
@@ -166,6 +187,7 @@ async function handleSubmit(event) {
     const date = dateInput.value === "" ? null : dateInput.value;
     try {
         const createdWorkout = await createWorkout({ type, durationMinutes, date });
+        clearFieldInvalidState();
         statusZone.textContent = registrationSuccessMessage(createdWorkout.calories);
         durationInput.value = "";
         await loadWorkouts();

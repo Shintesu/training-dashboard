@@ -2,10 +2,12 @@
     --background: #ffffff;
     --surface: #f4f6f8;
     --surface-strong: #e7ecf1;
+    --surface-pressed: #cfd7df;
     --text: #1b1f23;
     --muted: #4a5560;
     --primary: #0b4f8a;
     --primary-strong: #083b68;
+    --primary-pressed: #052c4e;
     --on-primary: #ffffff;
     --border: #c7ced6;
     --focus: #0b5cad;
@@ -64,8 +66,15 @@ body {
     text-decoration: none;
 }
 
-.nav-list a:hover {
+@media (hover: hover) {
+    .nav-list a:hover {
+        border-bottom-color: currentColor;
+    }
+}
+
+.nav-list a:active {
     border-bottom-color: currentColor;
+    color: var(--primary-strong);
 }
 
 .nav-list a[aria-current="page"] {
@@ -85,6 +94,7 @@ section {
 
 h2 {
     font-size: 1.25rem;
+    margin: 0 0 var(--space);
 }
 
 h3 {
@@ -97,6 +107,10 @@ h3 {
     display: block;
     font-weight: 400;
     margin: 0.25rem 0 0;
+}
+
+#week-range {
+    margin-bottom: var(--space);
 }
 
 .form-field {
@@ -130,6 +144,7 @@ select {
     border: 0;
     border-radius: var(--radius);
     cursor: pointer;
+    min-height: 2.25rem;
     padding: 0.5rem 1rem;
 }
 
@@ -139,8 +154,14 @@ select {
     width: 100%;
 }
 
-.primary-button:hover {
-    background-color: var(--primary-strong);
+@media (hover: hover) {
+    .primary-button:hover {
+        background-color: var(--primary-strong);
+    }
+}
+
+.primary-button:active {
+    background-color: var(--primary-pressed);
 }
 
 .primary-button:disabled {
@@ -153,24 +174,35 @@ select {
     color: var(--text);
 }
 
-.delete-button:hover {
-    background-color: var(--border);
+@media (hover: hover) {
+    .delete-button:hover {
+        background-color: var(--border);
+    }
 }
 
-.field-error,
-.alert-message {
+.delete-button:active {
+    background-color: var(--surface-pressed);
+}
+
+.field-error {
     color: var(--error);
     margin: 0.25rem 0 0;
 }
 
+.alert-message {
+    color: var(--error);
+    margin: var(--space) 0 0;
+}
+
 .status-message {
     color: var(--success);
-    margin: 0.5rem 0 0;
+    margin: var(--space) 0 0;
 }
 
 .status-text,
 .empty-message {
     color: var(--muted);
+    margin: var(--space) 0 0;
 }
 
 .field-error:empty,
@@ -200,6 +232,7 @@ select {
 }
 
 .table-wrapper {
+    margin-top: var(--space);
     max-width: 100%;
     overflow-x: auto;
 }
@@ -225,6 +258,12 @@ thead th {
 
 #comparison-table tbody th {
     font-weight: 600;
+}
+
+@media (hover: hover) {
+    tbody tr:hover {
+        background-color: var(--surface);
+    }
 }
 
 #workout-table,

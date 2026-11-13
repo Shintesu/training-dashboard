@@ -55,6 +55,10 @@ export function formatWeekRange(startDate, endDate) {
     return `${formatDate(startDate)} al ${formatDate(endDate)}`;
 }
 
+export function deleteButtonAriaLabel(typeLabel, isoDate) {
+    return `Eliminar el entrenamiento de ${typeLabel} del ${formatDate(isoDate)}`;
+}
+
 export function buildWorkoutTypeLabels(workoutTypes) {
     const labels = {};
     for (const workoutType of workoutTypes) {
