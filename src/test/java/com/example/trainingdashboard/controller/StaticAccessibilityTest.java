@@ -149,8 +149,8 @@ class StaticAccessibilityTest {
                 .as("format.js does not export deleteButtonAriaLabel")
                 .isTrue();
         assertThat(registerSource)
-                .as("register.js does not use deleteButtonAriaLabel")
-                .contains("deleteButtonAriaLabel");
+                .as("register.js does not call deleteButtonAriaLabel")
+                .containsPattern("\\bdeleteButtonAriaLabel\\s*\\(");
     }
 
     private static String readPage(String page) throws IOException {
