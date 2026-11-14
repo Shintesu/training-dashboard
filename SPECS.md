@@ -92,14 +92,14 @@ Persona usuaria
 |---|---|
 | Lenguaje | Java 21 LTS |
 | Framework | Spring Boot 4.1.x (la versión que genere Initializr) |
-| Web | Spring Web MVC (API REST, JSON) |
+| Web | Spring Web MVC (API REST, JSON); en Spring Boot 4 el starter se llama `spring-boot-starter-webmvc` |
 | Persistencia | Spring Data JPA, PostgreSQL |
 | Validación | Bean Validation |
 | Construcción | Maven (con Maven Wrapper, `./mvnw`) |
 | Pruebas | JUnit, AssertJ, Mockito y MockMvc (los starters de prueba de Spring Boot) |
 | Frontend | HTML5, CSS3 y JavaScript vanilla (módulos ES) en `src/main/resources/static` |
 
-Dependencias de Initializr: `web`, `data-jpa`, `validation` y `postgresql`. No se agregan otras sin aprobación.
+Dependencias de Initializr: `web` (que en Spring Boot 4 genera `spring-boot-starter-webmvc`), `data-jpa`, `validation` y `postgresql`. No se agregan otras sin aprobación.
 
 El frontend lo sirve la misma aplicación: un solo origen, sin CORS.
 
@@ -134,7 +134,7 @@ com.example.trainingdashboard
 │                WeeklyComparisonResponse, ErrorResponse
 ├── enums        WorkoutType
 ├── exception    GlobalExceptionHandler, WorkoutNotFoundException, SanitizedStackTrace
-└── config       ClockConfig, DemoDataLoader
+└── config       ClockConfig, JacksonConfig, DemoDataLoader
 ```
 
 Los nombres pueden ajustarse durante la implementación sin cambiar el alcance. Las capas y sus reglas no se ajustan.
@@ -429,9 +429,9 @@ static/
 ### 13.1 Registro (`index.html`)
 
 - Selector de tipo, cargado desde `GET /api/workout-types`. Las etiquetas salen de la API, sin copia en el frontend (§8.1), y un código que no esté en la lista se muestra tal cual. El botón "Registrar" permanece deshabilitado hasta que carguen los tipos y, si no cargan, se muestra el texto de falla al cargar datos.
-- Campo de duración, campo de fecha (por defecto, la fecha de hoy del navegador) y botón "Registrar". La duración se envía como número entero JSON (no como cadena) y la fecha como `AAAA-MM-DD` (§10).
+- Campo de duración, campo de fecha (por defecto, la fecha de hoy del navegador) y botón "Registrar". La duración se envía como número JSON (no como cadena) y la fecha como `AAAA-MM-DD` (§10); el formulario no valida por su cuenta y el servidor rechaza los decimales.
 - Tras registrar: mensaje de éxito (§12.4), se vacía la duración, se conservan tipo y fecha y se refresca la lista.
-- Errores por campo bajo el campo correspondiente y `message` en la zona de estado.
+- Errores por campo bajo el campo correspondiente (el campo recibe `aria-invalid="true"`) y `message` en la zona de alerta (`role="alert"`); los éxitos van en la zona de estado (`role="status"`).
 - Tabla "Entrenamientos registrados" (Fecha, Tipo, Duración (min), Calorías (kcal), Acciones) con botón "Eliminar" por fila y confirmación.
 
 ### 13.2 Dashboard (`dashboard.html`)
@@ -448,11 +448,21 @@ Tabla con las columnas "Métrica", "Semana actual", "Semana anterior" y "Diferen
 - Diferencia: `▲ +30` si es positiva, `▼ -20` si es negativa y `= 0` si es cero. El color acompaña al símbolo y nunca lo reemplaza.
 - Todo texto que viene de la API se inserta con `textContent`.
 
+### 13.5 Accesibilidad
+
+- Cada página tiene un único `main` y un único `h1`; el `nav` lleva `aria-label="Principal"` y marca la página actual con `aria-current="page"`.
+- Los `th` de los encabezados llevan `scope="col"` y cada tabla se asocia con el título de su sección mediante `aria-labelledby`.
+- El botón "Eliminar" de cada fila conserva ese texto visible y su `aria-label` lo distingue: "Eliminar el entrenamiento de {Tipo} del {DD/MM/AAAA}".
+- El campo de duración lleva `autocomplete="off"`.
+- Los estados `:hover` solo se aplican con `@media (hover: hover)`, y el color nunca es lo único que comunica algo.
+- `StaticAccessibilityTest` y `StaticFrontendConventionsTest` hacen cumplir estas reglas (§16).
+
 ---
 
 ## 14. Configuración y perfiles
 
 ```properties
+spring.application.name=training-dashboard
 spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/training_dashboard}
 spring.datasource.username=${DB_USERNAME:postgres}
 spring.datasource.password=${DB_PASSWORD}
@@ -554,7 +564,7 @@ Casos prioritarios:
 - Un error no previsto devuelve el 500 genérico sin detalles, y el log no contiene mensajes de excepciones ni la cadena de conexión.
 - `DemoDataLoader`: totales exactos; no toca los datos si la semana actual tiene entrenamientos; reemplaza los datos viejos y la tabla vacía; conserva los datos anteriores y no detiene el arranque si la carga falla; la tarea programada queda registrada con la inicialización perezosa activada; arranque sobre una base recién creada.
 
-El frontend se verifica recorriendo los escenarios del §15 en el navegador, incluida la vista de 375 px. No hay herramientas de prueba de JavaScript.
+El frontend se verifica recorriendo los escenarios del §15 en el navegador, incluida la vista de 375 px. No hay herramientas de prueba de JavaScript. Las convenciones, la accesibilidad básica y la carga de cada recurso estático las verifican `StaticFrontendConventionsTest`, `StaticAccessibilityTest` y `StaticPagesTest`, y `ErrorLeakSweepTest` comprueba contra el servidor real que ningún error filtra detalles internos.
 
 ---
 
@@ -567,13 +577,13 @@ Se despliega solo con el proyecto terminado (Fase 10) y solo con datos de demo, 
 - Render ejecuta de forma nativa Node.js/Bun, Python, Ruby, Go, Rust y Elixir. **Java solo con Docker.** Por eso el repositorio incluye un `Dockerfile` en la raíz, que Render detecta.
 - El servicio gratuito se duerme a los 15 minutos sin tráfico y tarda hasta un minuto en despertar.
 - Cada workspace recibe 750 horas gratuitas de instancia al mes. Si se agotan, Render suspende los servicios gratuitos hasta el mes siguiente. Los servicios dormidos no consumen horas.
-- La base de datos gratuita de Render expira a los 30 días: no se usa. La base va en **Neon** (plan gratuito; el plan vigente se verifica en la Fase 10).
+- La base de datos gratuita de Render expira a los 30 días: no se usa. La base va en **Neon**: su plan gratuito es permanente y no pide tarjeta, e incluye 100 CU-horas de cómputo y 1 GB de almacenamiento por proyecto (documentación de Neon, noviembre de 2026). El cómputo se suspende tras unos 5 minutos sin actividad y despierta con la primera conexión (dato de guías de terceros; se confirma en la Fase 10).
 - El sistema de archivos del servicio gratuito es efímero: la aplicación no escribe en disco.
 
 ### 17.2 Decisiones
 
 - Cuenta de Render propia para este proyecto, distinta de la de otros proyectos, para no compartir las 750 horas del workspace.
-- Un monitor gratuito (UptimeRobot) visita `/` con un intervalo menor a 15 minutos para mantener el servicio despierto.
+- Un monitor gratuito (UptimeRobot, comprobación cada 5 minutos y uso personal) visita `/` para mantener el servicio despierto. Apunta a `/`, una página estática que no toca la base, y nunca a una ruta `/api/...`, para que Neon pueda suspender su cómputo y no agote sus CU-horas. `GET /` solo responde 200 con `Accept: text/html`: con `application/json` devuelve 406.
 - Neon en la misma región que Render (Ohio), con conexión directa: sin pooler, host sin `-pooler`.
 - `DB_URL=jdbc:postgresql://HOST/neondb?sslmode=require`; usuario y contraseña van en `DB_USERNAME` y `DB_PASSWORD`, nunca dentro de la URL.
 
@@ -704,7 +714,7 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 
 ## 22. Versión y registro de cambios
 
-**Versión actual: 1.4**
+**Versión actual: 1.5**
 
 | Versión | Fecha | Cambio |
 |---|---|---|
@@ -713,3 +723,4 @@ Si la respuesta es no, queda fuera del MVP. El objetivo es terminar un proyecto 
 | 1.2 | 2026-11-07 | Lectura estricta de `type`, `durationMinutes` y `date` (§10), cadena vacía como ausente y log del 500 sin mensajes (§12.1) |
 | 1.3 | 2026-11-10 | Texto "Cargando..." (§12.4), etiquetas de los tipos desde la API y botón de registro deshabilitado hasta cargar los tipos (§13.1) |
 | 1.4 | 2026-11-11 | `SanitizedStackTrace` compartida para el log de errores (§6.2) y nota sobre la primera carga de la demo al arrancar (§15.2) |
+| 1.5 | 2026-11-14 | Accesibilidad del frontend (§13.5), aclaraciones de §5, §6.2, §13.1 y §14, datos verificados de Neon y UptimeRobot (§17) y las pruebas de la Fase 8 (§16) |

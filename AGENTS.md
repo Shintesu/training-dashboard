@@ -46,7 +46,7 @@ Detalle en el SPECS; estas son las que no se negocian.
 - Todo error de la API usa el cuerpo `ErrorResponse` (`message` y `fieldErrors`) con los mensajes exactos del SPECS §12. Un error no previsto devuelve el 500 genérico, sin trazas, SQL ni mensajes de librerías. En el log solo se registran el método, la ruta y las clases y frames de la excepción y de sus causas, nunca sus mensajes (SPECS §12.1).
 - JSON en `camelCase`, rutas en inglés y en plural, y valores controlados como enums (`RUNNING`, `CYCLING`, `SWIMMING`, `WEIGHTS`, `WALKING`).
 - Los mensajes y textos que ve la persona usuaria están en español (SPECS §12 y §13).
-- El frontend es JavaScript vanilla sin librerías ni CDN; los datos de la API se insertan con `textContent` (SPECS §13). La duración se envía como número entero JSON, las etiquetas de los tipos salen de la API y `StaticFrontendConventionsTest` hace cumplir las reglas de estilo: no la debilites.
+- El frontend es JavaScript vanilla sin librerías ni CDN; los datos de la API se insertan con `textContent` (SPECS §13). La duración se envía como número JSON (no como cadena), las etiquetas de los tipos salen de la API y `StaticFrontendConventionsTest` y `StaticAccessibilityTest` hacen cumplir las reglas de estilo y de accesibilidad (SPECS §13.5): no las debilites.
 - No hay autenticación ni autorización. No agregarlas.
 - El esquema se gestiona con `ddl-auto=update` en desarrollo y demo, `create-drop` en pruebas y `none` en Render (SPECS §14).
 - Las pruebas de integración usan la base PostgreSQL local `training_dashboard_test` con el perfil `test`. Sin H2 ni Testcontainers (SPECS §16).

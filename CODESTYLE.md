@@ -311,6 +311,7 @@ log.debug("registered workout {} of type {}", workoutId, type);
 - Success messages use `role="status"`; errors use `role="alert"`.
 - A single `styles.css`. Class names are English `kebab-case`. Colors are CSS custom properties on `:root`. Mobile first; the pages must work at 375 px. No `!important`.
 - Color never carries meaning alone: every indicator also has a symbol and text (SPECS §13.4).
+- Tables: `th` elements in `thead` carry `scope="col"` and each table is associated with its section title through `aria-labelledby`. Repeated actions (such as the delete buttons) keep their visible text and get a distinct `aria-label` that starts with it. `:hover` rules live inside `@media (hover: hover)`.
 
 ---
 

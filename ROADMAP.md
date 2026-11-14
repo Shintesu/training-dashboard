@@ -41,7 +41,7 @@
 
 ## Fase 6 — Frontend (completada)
 - Crear `index.html`, `dashboard.html`, `comparison.html`, `styles.css` y los módulos de `js/` del §13, sin librerías ni CDN.
-- Registro: selector cargado desde `/api/workout-types`, formulario, errores por campo, mensajes del §12.4 y tabla con eliminación y confirmación. La duración se envía como número entero JSON, no como texto (§10).
+- Registro: selector cargado desde `/api/workout-types`, formulario, errores por campo, mensajes del §12.4 y tabla con eliminación y confirmación. La duración se envía como número JSON, no como texto (§10).
 - Dashboard y comparativa con los formatos del §13.4 (fechas `DD/MM/AAAA`, indicadores `▲`, `▼` y `=`).
 - `/` responde 200 (health check).
 - Verificar en el navegador con `PORT=8081`: flujos felices, errores, estados vacíos con una base temporal y vista de 375 px.
@@ -55,12 +55,13 @@
 - Preparar los cinco escenarios de demo del §15.1.
 - Tests: totales exactos con `Clock.fixed`; no toca los datos si la semana actual tiene entrenamientos; reemplaza datos viejos y tabla vacía; carga todo o nada (una falla conserva los datos anteriores y no detiene el arranque); la tarea programada queda registrada con la inicialización perezosa activada; arranque sobre una base recién creada.
 
-## Fase 8 — Pruebas y pulido
+## Fase 8 — Pruebas y pulido (completada)
 - Completar los tres niveles de pruebas del §16 y revisar que cubran los casos prioritarios.
 - Comprobar que cada prueba de integración falla si falta lo que protege (mutaciones puntuales tras el commit).
 - Revisar validaciones, navegación y accesibilidad básica (etiquetas asociadas, contraste, foco); mejorar la presentación visual sin sobrecargar el proyecto.
 - Verificar que ningún error muestre trazas, SQL ni mensajes de librerías.
 - Auditoría de consistencia entre `SPECS.md` y el código (solo lectura).
+- Se hizo en dos partes: matriz de cobertura, auditoría y pruebas nuevas (`ClockConfigTest`, `ErrorLeakSweepTest`, `UnexpectedErrorLeakSweepTest`, `WorkoutStrictReadingSupplementTest` y `DemoDataLoaderFreshDatabaseTest`), y después pulido visual y accesibilidad (`StaticAccessibilityTest`).
 
 ## Fase 9 — Documentación y portafolio
 - Completar el README: guardar en `docs/` las capturas y el GIF con los nombres exactos que ya referencia (minúsculas y extensión exacta), grabados con los datos de demo recién cargados.
@@ -73,11 +74,11 @@
 - Desplegar solo cuando el proyecto esté terminado y listo para mostrarse.
 - Usar una cuenta de Render propia para este proyecto. Si Render pide una tarjeta de verificación al crearla, avisar antes de seguir.
 - Crear el `Dockerfile` y el `.dockerignore` del §17.3: es el único uso permitido de Docker.
-- Crear el proyecto en Neon (Ohio), con conexión directa, y comprobar la conexión con `psql`. Verificar el plan gratuito vigente.
+- Crear el proyecto en Neon (Ohio), con conexión directa, y comprobar la conexión con `psql`. Verificar en su panel el plan gratuito (1 GB y 100 CU-horas) y, tras el primer despliegue, que el cómputo se suspende tras unos 5 minutos sin uso (el pool de Hikari no debe mantenerlo despierto).
 - Arrancar el JAR localmente contra Neon con el perfil `demo`: crea el esquema y carga los datos.
 - Crear el Web Service en Render (Docker, `main`, Ohio, Free, health check `/`) con las variables del §17.4. Las variables secretas no se pegan en el chat.
 - Con el esquema creado, agregar `SPRING_MAIN_LAZY_INITIALIZATION=true` y `SPRING_JPA_HIBERNATE_DDL_AUTO=none`.
-- Configurar un monitor (UptimeRobot) que visite `/` con un intervalo menor a 15 minutos.
+- Configurar un monitor (UptimeRobot, plan gratuito: comprobación cada 5 minutos y uso personal) que visite `/` y nunca una ruta de la API, para que Neon pueda suspender su cómputo y no agote sus CU-horas. `GET /` solo responde 200 con `Accept: text/html`: si el monitor o el health check de Render exigieran JSON, recibirían 406.
 - Recorrer los cinco escenarios de demo contra la URL pública, incluida la vista móvil.
 - Poner la URL de la demo en el README, agregar descripción y temas en GitHub y hacer público el repositorio; comprobar con `gh repo view --json visibility`.
 
