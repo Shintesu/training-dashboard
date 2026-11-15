@@ -63,11 +63,11 @@
 - Auditoría de consistencia entre `SPECS.md` y el código (solo lectura).
 - Se hizo en dos partes: matriz de cobertura, auditoría y pruebas nuevas (`ClockConfigTest`, `ErrorLeakSweepTest`, `UnexpectedErrorLeakSweepTest`, `WorkoutStrictReadingSupplementTest` y `DemoDataLoaderFreshDatabaseTest`), y después pulido visual y accesibilidad (`StaticAccessibilityTest`).
 
-## Fase 9 — Documentación y portafolio
+## Fase 9 — Documentación y portafolio (completada)
 - Completar el README: guardar en `docs/` las capturas y el GIF con los nombres exactos que ya referencia (minúsculas y extensión exacta), grabados con los datos de demo recién cargados.
-- Verificar que no haya credenciales en el repositorio ni en su historial, y que `.opencode` solo contenga `commands/fase.md`.
+- Verificar que no haya credenciales en el repositorio ni en su historial, y que `.opencode` y `target` no estén versionados (la carpeta `.opencode` se excluye con `.git/info/exclude`).
 - Revisar que ninguna captura muestre datos personales.
-- Revisar la consistencia entre `SPECS.md`, el README y la implementación final.
+- Revisar la consistencia entre `SPECS.md`, el README y la implementación final (cubierta por la auditoría de la Fase 8; solo queda la mención del `Dockerfile` en el README, que crea la Fase 10).
 - Preparar, fuera del repositorio, la explicación de las decisiones técnicas para entrevistas: semana derivada con `Clock` y zona configurable, calorías en el backend, DTO como `record`, formato único de errores, y por qué Render exige Docker.
 
 ## Fase 10 — Despliegue en Render + Neon
