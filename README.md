@@ -160,3 +160,4 @@ Autenticación y usuarios, rutinas y ejercicios, metas, notificaciones, exportac
 - [CODESTYLE.md](CODESTYLE.md): reglas de código.
 - [ROADMAP.md](ROADMAP.md): fases de desarrollo.
 - [AGENTS.md](AGENTS.md): instrucciones para agentes de IA y contribuciones.
+- [LICENSE](LICENSE): licencia MIT.
