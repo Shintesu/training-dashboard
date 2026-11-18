@@ -2,7 +2,7 @@
 
 MVP para un gimnasio: permite registrar entrenamientos, consultar las métricas de la semana actual y compararlas con las de la semana anterior. Es una API REST en **Java 21 + Spring Boot + PostgreSQL** con una interfaz web sencilla en HTML, CSS y JavaScript vanilla.
 
-**Demo en línea:** se publica al cerrar la Fase 10 del [ROADMAP](ROADMAP.md).
+> **Demo en línea:** https://training-dashboard-hyee.onrender.com. Corre en el plan gratuito de Render con la base en Neon: siempre encendida a menos que haya una caída de servidores. No tiene autenticación, así que solo contiene datos ficticios que cualquiera puede crear o eliminar.
 
 ## Qué demuestra este proyecto
 
@@ -126,7 +126,6 @@ Necesita la base local `training_dashboard_test`. Hay tres niveles: unitarias de
 
 La demo corre en Render con la base de datos en Neon. Render no ejecuta Java de forma nativa, por eso el repositorio incluye un `Dockerfile`: es el único uso de Docker del proyecto, no se usa en local. El detalle está en el [SPECS §17](SPECS.md).
 
-- La primera visita puede tardar si el servicio estaba dormido.
 - La aplicación no tiene autenticación: cualquiera con la URL puede crear y eliminar datos, así que la demo solo contiene datos ficticios.
 
 ## Decisiones técnicas
