@@ -70,9 +70,9 @@
 - Revisar la consistencia entre `SPECS.md`, el README y la implementación final (cubierta por la auditoría de la Fase 8; solo queda la mención del `Dockerfile` en el README, que crea la Fase 10).
 - Preparar, fuera del repositorio, la explicación de las decisiones técnicas para entrevistas: semana derivada con `Clock` y zona configurable, calorías en el backend, DTO como `record`, formato único de errores, y por qué Render exige Docker.
 
-## Fase 10 — Despliegue en Render + Neon
+## Fase 10 — Despliegue en Render + Neon (completada)
 - Desplegar solo cuando el proyecto esté terminado y listo para mostrarse.
-- Usar una cuenta de Render propia para este proyecto. Si Render pide una tarjeta de verificación al crearla, avisar antes de seguir.
+- Usar una cuenta de Render propia para este proyecto.
 - Crear el `Dockerfile` y el `.dockerignore` del §17.3: es el único uso permitido de Docker.
 - Crear el proyecto en Neon (Ohio), con conexión directa, y comprobar la conexión con `psql`. Verificar en su panel el plan gratuito (1 GB y 100 CU-horas) y, tras el primer despliegue, que el cómputo se suspende tras unos 5 minutos sin uso (el pool de Hikari no debe mantenerlo despierto).
 - Arrancar el JAR localmente contra Neon con el perfil `demo`: crea el esquema y carga los datos.
