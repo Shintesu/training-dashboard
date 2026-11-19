@@ -191,6 +191,10 @@ Autenticación y usuarios, rutinas y ejercicios, metas, notificaciones, exportac
 
 La demo pública corre en Render con la base de datos en Neon. Render no ejecuta Java de forma nativa, por eso el repositorio incluye un `Dockerfile`: es el único uso de Docker del proyecto y no se usa en local. La configuración se hace con variables de entorno desde el panel de Render, sin credenciales en el repositorio. Como la aplicación no tiene autenticación, cualquiera con la URL puede crear y eliminar datos, así que la demo solo contiene datos ficticios. Detalle en [SPECS.md](SPECS.md) §17.
 
+## Desarrollo asistido por IA
+
+Este proyecto se construyó con un flujo guiado por especificaciones, usando agentes de IA para programar (Claude y opencode con DeepSeek). El alcance y las decisiones se documentan primero en la especificación y en el roadmap por fases, y las reglas para los agentes están en `AGENTS.md`. Cada fase se cierra con revisión manual y pruebas automatizadas. Ver *Documentación del proyecto* más abajo.
+
 ## Documentación del proyecto
 
 | Archivo | Contenido |
