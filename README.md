@@ -191,6 +191,10 @@ Authentication and users, routines and exercises, goals, notifications, export, 
 
 The public demo runs on Render with the database on Neon. Render does not run Java natively, so the repository includes a `Dockerfile`: it is the only use of Docker in the project and it is not used locally. Configuration is done with environment variables from the Render dashboard, with no credentials in the repository. Since the application has no authentication, anyone with the URL can create and delete data, so the demo only contains fictional data. Details in [SPECS.md](SPECS.md) §17.
 
+## AI-assisted development
+
+This project was built with a spec-driven workflow using AI coding agents (Claude, and opencode with DeepSeek). The scope and decisions are written down first in the specification and the phased roadmap, and the rules for the agents live in `AGENTS.md`. Each phase is closed with a manual review and automated tests. See *Project documentation* below.
+
 ## Project documentation
 
 The project documents are written in Spanish.
